@@ -1,0 +1,6 @@
+auth.json
+*.db
+*.sqlite*
+.env*
+config.toml
+backups/

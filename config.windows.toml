@@ -1,0 +1,19 @@
+model_provider = "custom"
+model = "gpt-6-astra"
+
+[model_providers.custom]
+name = "CPA"
+base_url = "https://YOUR-CPA-HOST/v1"
+wire_api = "responses"
+requires_openai_auth = false
+http_headers = { "x-openai-actor-authorization" = "local-image-extension" }
+
+[model_providers.custom.auth]
+command = "powershell.exe"
+args = ["-NoProfile", "-NonInteractive", "-Command", "$ErrorActionPreference='Stop'; $codexDir=if($env:CODEX_HOME){$env:CODEX_HOME}else{Join-Path $env:USERPROFILE '.codex'}; $cpaKey=(Get-Content -Raw -LiteralPath (Join-Path $codexDir 'auth.json') | ConvertFrom-Json).OPENAI_API_KEY; if([string]::IsNullOrWhiteSpace($cpaKey)){throw 'Missing OPENAI_API_KEY in Codex auth.json'}; [Console]::Out.Write($cpaKey)"]
+
+[features]
+image_generation = true
+
+[features.code_mode]
+direct_only_tool_namespaces = ["image_gen"]
